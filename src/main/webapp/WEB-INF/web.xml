@@ -1,0 +1,145 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+
+  <filter>
+    <filter-name>name-filter</filter-name>
+    <filter-class>com.employeemanagement.filter.NameFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>phone-number-filter</filter-name>
+    <filter-class>com.employeemanagement.filter.PhoneNumberFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>id-filter</filter-name>
+    <filter-class>com.employeemanagement.filter.IdFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>address-filter</filter-name>
+    <filter-class>com.employeemanagement.filter.AddressFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>session-filter</filter-name>
+    <filter-class>com.employeemanagement.filter.SessionValidationFilter</filter-class>
+  </filter>
+
+
+  <filter-mapping>
+    <filter-name>session-filter</filter-name>
+    <url-pattern>/add_employee.jsp</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>session-filter</filter-name>
+    <url-pattern>/addEmployee</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>name-filter</filter-name>
+    <url-pattern>/addEmployee</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>phone-number-filter</filter-name>
+    <url-pattern>/addEmployee</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>address-filter</filter-name>
+    <url-pattern>/addEmployee</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>session-filter</filter-name>
+    <url-pattern>/get_employee.jsp</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>session-filter</filter-name>
+    <url-pattern>/getEmployee</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>id-filter</filter-name>
+    <url-pattern>/getEmployee</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>session-filter</filter-name>
+    <url-pattern>/remove_employee.jsp</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>session-filter</filter-name>
+    <url-pattern>/removeEmployee</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>id-filter</filter-name>
+    <url-pattern>/removeEmployee</url-pattern>
+  </filter-mapping>
+
+<!--  <filter-mapping>-->
+<!--    <filter-name>id-filter</filter-name>-->
+<!--    <url-pattern>/updateEmployee</url-pattern>-->
+<!--  </filter-mapping>-->
+<!--  <filter-mapping>-->
+<!--    <filter-name>name-filter</filter-name>-->
+<!--    <url-pattern>/updateEmployee</url-pattern>-->
+<!--  </filter-mapping>-->
+<!--  <filter-mapping>-->
+<!--    <filter-name>phone-number-filter</filter-name>-->
+<!--    <url-pattern>/updateEmployee</url-pattern>-->
+<!--  </filter-mapping>-->
+<!--  <filter-mapping>-->
+<!--    <filter-name>address-filter</filter-name>-->
+<!--    <url-pattern>/updateEmployee</url-pattern>-->
+<!--  </filter-mapping>-->
+
+  <filter-mapping>
+    <filter-name>session-filter</filter-name>
+    <url-pattern>/update_employee.jsp</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>session-filter</filter-name>
+    <url-pattern>/updateEmployee</url-pattern>
+  </filter-mapping>
+
+<servlet>
+  <servlet-name>admin-login</servlet-name>
+  <servlet-class>com.employeemanagement.servlet.LoginServlet</servlet-class>
+</servlet>
+<servlet>
+  <servlet-name>admin-logout</servlet-name>
+  <servlet-class>com.employeemanagement.servlet.LogoutServlet</servlet-class>
+</servlet>
+  <servlet>
+    <servlet-name>employee</servlet-name>
+    <servlet-class>com.employeemanagement.servlet.EmployeeServlet</servlet-class>
+  </servlet>
+
+<servlet-mapping>
+  <servlet-name>admin-login</servlet-name>
+  <url-pattern>/adminLogin</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+  <servlet-name>admin-logout</servlet-name>
+  <url-pattern>/adminLogout</url-pattern>
+</servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>employee</servlet-name>
+    <url-pattern>/addEmployee</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>employee</servlet-name>
+    <url-pattern>/getEmployee</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>employee</servlet-name>
+    <url-pattern>/removeEmployee</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>employee</servlet-name>
+    <url-pattern>/updateEmployee</url-pattern>
+  </servlet-mapping>
+
+<session-config>
+  <session-timeout>30</session-timeout>
+</session-config>
+
+</web-app>
