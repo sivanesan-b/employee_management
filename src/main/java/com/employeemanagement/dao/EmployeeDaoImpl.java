@@ -264,7 +264,7 @@ public class EmployeeDaoImpl implements EmployeeDao{
 
                     if (!oldCurrent.equals(newCurrent)) {
                         String updateCurrent = "UPDATE employee_address SET street_name = ?, state = ? " +
-                                "WHERE employee_id = ? AND address_type = 'current'";
+                                "WHERE employee_id = ? AND address_type = 'CURRENT'";
                         addressPreparedStmt = connection.prepareStatement(updateCurrent);
                         addressPreparedStmt.setString(1, newCurrent.getStreetName());
                         addressPreparedStmt.setString(2, newCurrent.getState());
@@ -279,7 +279,7 @@ public class EmployeeDaoImpl implements EmployeeDao{
         } catch (SQLException e) {
             try {
                 if (connection != null) {
-                    connection.rollback(); // Rollback on error
+                    connection.rollback();
                 }
             } catch (SQLException ex) {
                 LOGGER.log(Level.SEVERE, "Unable to rollback ", ex);
