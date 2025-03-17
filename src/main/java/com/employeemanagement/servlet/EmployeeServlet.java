@@ -40,12 +40,15 @@ public class EmployeeServlet extends HttpServlet {
 
         int isEmployeeAdded = employeeService.addEmployee(employee);
         if(isEmployeeAdded == -1){
+            response.setStatus(HttpServletResponse.SC_CONFLICT);
             LOGGER.log(Level.WARNING,"Employee with this Phone Number already exists");
             out.println("{\"message\": \"Employee with this Phone Number already exists\"}");
         } else if (isEmployeeAdded==1) {
+            response.setStatus(HttpServletResponse.SC_CREATED);
             LOGGER.log(Level.INFO,"Employee added Successfully");
             out.println("{\"message\": \"Employee added Successfully\"}");
         } else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             LOGGER.log(Level.SEVERE, "Something went wrong, unable to add employee");
             out.println("{\"error\": \"Something went wrong, unable to add employee\"}");
         }
@@ -64,12 +67,15 @@ public class EmployeeServlet extends HttpServlet {
                 long employeeId = Long.parseLong(request.getParameter("id"));
                 Employee employee = employeeService.getEmployee(employeeId);
                 if (employee == null) {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     LOGGER.log(Level.WARNING, "No Employee found for the ID: " + employeeId);
                     out.println("{\"message\": \"No Employee found for the ID: " + employeeId + "\"}");
                 } else if (employee.getId() == 0) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                     LOGGER.log(Level.SEVERE, "Something went wrong.");
                     out.println("{\"error\": \"Something went wrong, Unable to get Employee Details\"}");
                 } else {
+                    response.setStatus(HttpServletResponse.SC_OK);
                     LOGGER.log(Level.INFO, "Employee fetched");
                     out.println(employee);
                 }
@@ -79,15 +85,19 @@ public class EmployeeServlet extends HttpServlet {
                 long employeeId = Long.parseLong(request.getParameter("id"));
                 int rows = employeeService.removeEmployee(employeeId);
                 if (rows == 1) {
+                    response.setStatus(HttpServletResponse.SC_OK);
                     LOGGER.log(Level.INFO, "Employee deleted successfully");
                     out.println("{ \"message\": \"Employee deleted successfully\" }");
                 } else if (rows == 0) {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     LOGGER.log(Level.WARNING, "No Employee found for the ID: " + employeeId);
                     out.println("{ \"message\": \"No Employee found for the ID: " + employeeId + "\" }");
                 } else if (rows == -1) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                     LOGGER.log(Level.SEVERE, "Something went wrong in employee deletion");
                     out.println("{ \"message\": \"Something went wrong in employee deletion\" }");
                 } else {
+                    response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
                     LOGGER.log(Level.SEVERE, "Employee deleted, " + rows + " rows(s) deleted");
                     out.println("{ \"message\": \"Employee deleted, " + rows + " row(s) deleted\" }");
                 }
@@ -97,14 +107,17 @@ public class EmployeeServlet extends HttpServlet {
                 long employeeId = Long.parseLong(request.getParameter("id"));
                 Employee employee = employeeService.getEmployee(employeeId);
                 if (employee == null) {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     LOGGER.log(Level.WARNING, "No Employee found for the ID: " + employeeId);
                     out.println("{ \"message\": \"No Employee found for the ID: " + employeeId + "\" }");
                 } else {
                     int rows = updateEmployee(request, employee);
                     if(rows == 2 || rows==3){
+                        response.setStatus(HttpServletResponse.SC_OK);
                         LOGGER.log(Level.INFO, "Update Successful");
                         out.println("{ \"message\": \"Update Successful\" }");
                     }else {
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                         LOGGER.log(Level.WARNING,"Something went wrong in updating");
                         out.println("{ \"message\": \"Something went wrong in updating\" }");
                     }
