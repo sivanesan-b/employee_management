@@ -7,6 +7,8 @@ import com.employeemanagement.model.AddressTypes;
 import com.employeemanagement.model.Employee;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -299,5 +301,62 @@ public class EmployeeDaoImpl implements EmployeeDao{
             }
         }
         return rows;
+    }
+
+    @Override
+    public List<Employee> getEmployees() {
+        return getEmployeesList(0);
+    }
+
+    @Override
+    public List<Employee> getEmployees(int limit) {
+        return getEmployeesList(limit);
+    }
+
+    private List<Employee> getEmployeesList(int limit){
+        List<Employee> employeeList = new ArrayList<>();
+        try(Connection connection = DbConfiguration.getConnection()){
+            // e->employee  ea->employee_address
+            String selectQuery = "SELECT e.employee_name, e.employee_id, e.employee_phone_no,ea.address_type, ea.street_name, ea.state " +
+                    "FROM employee AS e " +
+                    "INNER JOIN employee_address " +
+                    "AS ea ON e.employee_id = ea.employee_id " +
+                    "WHERE e.employee_id IN (SELECT DISTINCT e.employee_id FROM employee e LIMIT ";
+            // since this project uses postgres db, we go for LIMIT "ALL" otherwise sub query or any other method is required
+            selectQuery += limit == 0 ? "ALL)" : limit + ")";
+            PreparedStatement preparedStatement = connection.prepareStatement(selectQuery, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultSets = preparedStatement.executeQuery();
+            while (resultSets.next()) {
+                Employee employee = new Employee();
+                employee.setId(resultSets.getLong("employee_id"));
+                employee.setName(resultSets.getString("employee_name"));
+                employee.setPhone(resultSets.getString("employee_phone_no"));
+                if(resultSets.getString("address_type")
+                        .equals(AddressTypes.BOTH_PERMANENT_AND_CURRENT.toString())){
+                    employee.getPermanentAddress().setAddressType(AddressTypes.BOTH_PERMANENT_AND_CURRENT);
+                    employee.getPermanentAddress().setStreetName(resultSets.getString("street_name"));
+                    employee.getPermanentAddress().setState(resultSets.getString("state"));
+                } else {
+                    do{
+                        if(resultSets.getString("address_type")
+                                .equals(AddressTypes.PERMANENT.toString())){
+                            employee.getPermanentAddress().setAddressType(AddressTypes.PERMANENT);
+                            employee.getPermanentAddress().setStreetName(resultSets.getString("street_name"));
+                            employee.getPermanentAddress().setState(resultSets.getString("state"));
+                        } else {
+                            employee.getCurrentAddress().setAddressType(AddressTypes.CURRENT);
+                            employee.getCurrentAddress().setStreetName(resultSets.getString("street_name"));
+                            employee.getCurrentAddress().setState(resultSets.getString("street_name"));
+                        }
+                    } while (resultSets.next() && employee.getId()==resultSets.getLong("employee_id"));
+                    resultSets.previous();
+                }
+                employeeList.add(employee);
+            }
+            resultSets.close();
+        } catch (SQLException ex) {
+            LOGGER.log(Level.SEVERE, "Unable to get Employee Details.", ex);
+        }
+        return employeeList;
     }
 }

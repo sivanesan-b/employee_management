@@ -27,7 +27,7 @@
     <label for="current-state">State:</label>
     <input type="text" id="current-state" name="current-state" ><br><br
     <input type="hidden" name="action" value="update">
-    <input type="submit">
+    <input type="submit" value="Update Employee Details">
 </form>
 </body>
 </html>

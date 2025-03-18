@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -56,10 +57,17 @@ public class EmployeeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
+        Set<String> methods = new HashSet<>(Arrays.asList("get", "remove", "update", "getAll", "getAllByLimit"));
 
         String action = request.getParameter("action");
         LOGGER.log(Level.INFO, "In get method via " + action + " action");
 
+        if(action == null || !methods.contains(action)){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            LOGGER.log(Level.WARNING, "Request not processable, action is null or invalid actions");
+            out.println("{\"message\": \"Request not processable\"}");
+            return;
+        }
         switch (action) {
             case "get": {
                 long employeeId = Long.parseLong(request.getParameter("id"));
@@ -117,7 +125,7 @@ public class EmployeeServlet extends HttpServlet {
                     } else if (rows == -1) {
                         response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
                         LOGGER.log(Level.SEVERE, "Something's wrong in the employee address with ID: " + employeeId);
-                        out.println("{ \"message\": \"Something's wrong in address of the employee with ID: " + employeeId +" \" }");
+                        out.println("{ \"message\": \"Something's wrong in address of the employee with ID: " + employeeId + " \" }");
                     } else {
                         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                         LOGGER.log(Level.WARNING,"Something went wrong in updating");
@@ -126,6 +134,32 @@ public class EmployeeServlet extends HttpServlet {
                 }
                 break;
             }
+            case "getAll": {
+                List<Employee> employeeList = employeeService.getEmployees();
+                if(employeeList == null){
+                    LOGGER.log(Level.INFO, "No Records found");
+                } else {
+                    LOGGER.log(Level.INFO,employeeList.size()+" records found");
+                    for(Employee employee: employeeList){
+                        out.println(employee);
+                    }
+                }
+                break;
+            }
+            case "getAllByLimit": {
+                int limit = Integer.parseInt(request.getParameter("limit"));
+                List<Employee> employeeList = employeeService.getEmployees(limit);
+                if(employeeList == null){
+                    LOGGER.log(Level.INFO, "No Records found");
+                } else {
+                    LOGGER.log(Level.INFO,employeeList.size()+" records found");
+                    for(Employee employee: employeeList){
+                        out.println(employee);
+                    }
+                }
+                break;
+            }
+
         }
     }
 

@@ -61,12 +61,13 @@ public class Employee {
 
 //    @Override
 //    public String toString() {
-//        return "Employee " +
-//                "id=" + id + "\n" +
-//                "name=" + name + "\n" +
-//                "phone=" + phone + "\n" +
-//                permanentAddress + "\n" +
-//                currentAddress;
+//        return "Employee{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                ", phone='" + phone + '\'' +
+//                ", permanentAddress=" + permanentAddress +
+//                ", currentAddress=" + currentAddress +
+//                '}';
 //    }
 
     @Override

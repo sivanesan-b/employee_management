@@ -10,6 +10,7 @@
     <a href="remove_employee.jsp">Remove Employee</a><br>
     <a href="update_employee.jsp">Update Employee</a><br>
 
+    <br>
     <form action="adminLogout">
         <button type="submit">Logout</button>
     </form>

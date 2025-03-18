@@ -35,7 +35,7 @@ public class LoginServlet extends HttpServlet {
             adminSession.setAttribute("admin-logged", username);
             LOGGER.log(Level.INFO,"valid admin");
             response.sendRedirect("dashboard.jsp");
-        }else {
+        } else {
             LOGGER.log(Level.INFO,"invalid admin");
             response.sendRedirect("index.jsp");
         }

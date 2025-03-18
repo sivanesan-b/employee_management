@@ -25,7 +25,7 @@
     <label for="current-state">State:</label>
     <input type="text" id="current-state" name="current-state" required><br><br>
 
-    <input type="submit">
+    <button type="submit">Add Employee</button>
 
 </form>
 </body>

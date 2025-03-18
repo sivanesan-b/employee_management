@@ -2,9 +2,9 @@ package com.employeemanagement.service;
 
 import com.employeemanagement.config.LoggerConfig;
 import com.employeemanagement.dao.EmployeeDao;
-import com.employeemanagement.model.AddressTypes;
 import com.employeemanagement.model.Employee;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,13 +41,19 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     public int updateEmployee(Employee oldEmployee, Employee newEmployee){
         LOGGER.log(Level.INFO, "Employee service layer reached for remove employee");
-        if(oldEmployee.getPermanentAddress().equals(oldEmployee.getCurrentAddress())){
-            oldEmployee.getPermanentAddress().setAddressType(AddressTypes.BOTH_PERMANENT_AND_CURRENT);
-        }else{
-            oldEmployee.getPermanentAddress().setAddressType(AddressTypes.PERMANENT);
-            oldEmployee.getCurrentAddress().setAddressType(AddressTypes.CURRENT);
-        }
         return employeeDao.updateEmployee(oldEmployee, newEmployee);
+    }
+
+    @Override
+    public List<Employee> getEmployees() {
+        LOGGER.log(Level.INFO, "Employee service layer reached for get employees list without limit");
+        return employeeDao.getEmployees();
+    }
+
+    @Override
+    public List<Employee> getEmployees(int limit) {
+        LOGGER.log(Level.INFO, "Employee service layer reached for get employees list with limit");
+        return employeeDao.getEmployees(limit);
     }
 
     public EmployeeServiceImpl(EmployeeDao employeeDao){

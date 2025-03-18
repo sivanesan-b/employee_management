@@ -15,7 +15,7 @@
   </filter>
   <filter>
     <filter-name>id-filter</filter-name>
-    <filter-class>com.employeemanagement.filter.IdFilter</filter-class>
+    <filter-class>com.employeemanagement.filter.NumericParameterFilter</filter-class>
   </filter>
   <filter>
     <filter-name>address-filter</filter-name>
