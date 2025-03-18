@@ -274,6 +274,9 @@ public class EmployeeDaoImpl implements EmployeeDao{
                     }
                     LOGGER.log(Level.INFO, "Updated both addresses separately.");
                 }
+            } else {
+                LOGGER.log(Level.WARNING, "Something is wrong in the Address of the employee with ID: " + employeeId);
+                return -1;
             }
             connection.commit();
         } catch (SQLException e) {

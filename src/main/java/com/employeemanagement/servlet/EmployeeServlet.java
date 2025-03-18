@@ -30,9 +30,7 @@ public class EmployeeServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
 
-        Employee employee = new Employee();
-        employee.setName(request.getParameter("name"));
-        employee.setPhone(request.getParameter("phone"));
+        Employee employee = new Employee(request.getParameter("name"), request.getParameter("phone"));
         employee.getPermanentAddress().setStreetName(request.getParameter("permanent-street"));
         employee.getPermanentAddress().setState(request.getParameter("permanent-state"));
         employee.getCurrentAddress().setStreetName(request.getParameter("current-street"));
@@ -116,7 +114,11 @@ public class EmployeeServlet extends HttpServlet {
                         response.setStatus(HttpServletResponse.SC_OK);
                         LOGGER.log(Level.INFO, "Update Successful");
                         out.println("{ \"message\": \"Update Successful\" }");
-                    }else {
+                    } else if (rows == -1) {
+                        response.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
+                        LOGGER.log(Level.SEVERE, "Something's wrong in the employee address with ID: " + employeeId);
+                        out.println("{ \"message\": \"Something's wrong in address of the employee with ID: " + employeeId +" \" }");
+                    } else {
                         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                         LOGGER.log(Level.WARNING,"Something went wrong in updating");
                         out.println("{ \"message\": \"Something went wrong in updating\" }");
@@ -139,10 +141,7 @@ public class EmployeeServlet extends HttpServlet {
         String currentState = request.getParameter("current-state")==null ?
                 oldEmployee.getCurrentAddress().getState() : request.getParameter("current-state");
 
-        Employee newEmployee = new Employee();
-        newEmployee.setId(oldEmployee.getId());
-        newEmployee.setName(employeeName);
-        newEmployee.setPhone(employeePhoneNo);
+        Employee newEmployee = new Employee(oldEmployee.getId(), employeeName, employeePhoneNo);
         newEmployee.getPermanentAddress().setStreetName(permanentStreet);
         newEmployee.getPermanentAddress().setState(permanentState);
         newEmployee.getCurrentAddress().setStreetName(currentStreet);
