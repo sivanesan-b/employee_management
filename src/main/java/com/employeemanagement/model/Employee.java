@@ -44,6 +44,21 @@ public class Employee {
         this.currentAddress = new Address();
     }
 
+    public Employee(String employeeName, String phoneNumber){
+        this.name = employeeName;
+        this.phone = phoneNumber;
+        this.currentAddress = new Address();
+        this.permanentAddress = new Address();
+    }
+
+    public Employee(Long id, String employeeName, String phoneNumber){
+        this.id = id;
+        this.name = employeeName;
+        this.phone = phoneNumber;
+        this.currentAddress = new Address();
+        this.permanentAddress = new Address();
+    }
+
 //    @Override
 //    public String toString() {
 //        return "Employee " +
